@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,13 +27,20 @@ public class NutricionistaController {
 		return nutricionistaRepository.findAll();
 	}
 	
-	@GetMapping(path="nutricionista-id/{}")
+	@GetMapping(path="/nutricionista/id/{}")
 	public ResponseEntity<Optional<Nutricionista>> buscarNutricionistaPorId(@PathVariable(name="id", required = true) Long idNutricionista) {
 		return ResponseEntity.ok(nutricionistaRepository.findById(idNutricionista));
 	}
 	
-	@PostMapping(path="nutricionista/save")
+	@PostMapping(path="/nutricionista/save")
 	public void salvarNutricionista(Nutricionista nutricionista) {
 		nutricionistaRepository.save(nutricionista);
 	}
+	
+	@DeleteMapping(path="/nutricionista/id/{id}")
+	public void deletarNutricionista(@PathVariable(name="id", required = true) Long id) {
+		nutricionistaRepository.deleteById(id);
+	}
+	
+	
 }
