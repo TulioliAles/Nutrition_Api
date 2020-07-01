@@ -14,32 +14,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.nutrition.datasource.model.Nutricionista;
+import br.com.nutrition.exception.NutricionistaNotFoundException;
 import br.com.nutrition.repository.NutricionistaRepository;
 import br.com.nutrition.resource.model.NutricionistaResource;
+import br.com.nutrition.service.BuscarNutricionistaPorIdServicceImpl;
 import br.com.nutrition.service.BuscarNutricionistasServiceImpl;
 import br.com.nutrition.service.CadastroNutricionistaServiceImpl;
 
 @RestController
 @RequestMapping(value = "/api")
 public class NutricionistaController {
-
-	@Autowired
-	private NutricionistaRepository nutricionistaRepository;
 	
 	@Autowired
-	private BuscarNutricionistasServiceImpl serviceBusca;
+	private BuscarNutricionistasServiceImpl serviceBuscar;
 	
 	@Autowired
 	private CadastroNutricionistaServiceImpl serviceCadastro;
 	
+	@Autowired
+	private BuscarNutricionistaPorIdServicceImpl serviceBuscarPorId;
+	
 	@GetMapping(path="/nutricionistas")
 	public List<Nutricionista> buscarListaNutricionistas(){
-		return serviceBusca.buscarTodosNutricionistas();
+		return serviceBuscar.buscarTodosNutricionistas();
 	}
 	
 	@GetMapping(path="/nutricionista/id/{}")
-	public ResponseEntity<Optional<Nutricionista>> buscarNutricionistaPorId(@PathVariable(name="id", required = true) Long idNutricionista) {
-		return ResponseEntity.ok(nutricionistaRepository.findById(idNutricionista));
+	public Nutricionista buscarNutricionistaPorId(@PathVariable(name="id", required = true) Long id) throws NutricionistaNotFoundException {
+		return serviceBuscarPorId.buscarPorId(id);
 	}
 	
 	@PostMapping(path="/nutricionista/save")
@@ -48,8 +50,8 @@ public class NutricionistaController {
 	}
 	
 	@DeleteMapping(path="/nutricionista/id/{id}")
-	public void deletarNutricionista(@PathVariable(name="id", required = true) Long id) {
-		nutricionistaRepository.deleteById(id);
+	public void deletarNutricionista(@PathVariable(name="id", required = true) Long id) throws NutricionistaNotFoundException {
+		serviceBuscarPorId.deletarPorId(id);
 	}
 	
 	
