@@ -1,17 +1,22 @@
 package br.com.nutrition.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import br.com.nutrition.datasource.model.Nutricionista;
 import br.com.nutrition.repository.NutricionistaRepository;
 
-public class CadastroNutricionista {
-	
+@Service
+public class BuscarNutricionistasServiceImpl {
+
 	@Autowired
 	private NutricionistaRepository nutricionistaRepository;
 	
-	public void cadastrar(Nutricionista nutricionista) {
-		nutricionistaRepository.saveAndFlush(nutricionista);
+	public List<Nutricionista> buscarTodosNutricionistas() {
+		List<Nutricionista> listNutricionista = nutricionistaRepository.findAll();
+		return listNutricionista;
 	}
-
+	
 }
